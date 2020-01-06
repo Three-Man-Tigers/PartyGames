@@ -33,8 +33,8 @@ public class AiMove : MonoBehaviour
         GetComponent<PositionConstraint>().SetSource(0,constraintSource);
         
         //將 AiTarget 移出子物件
-        aiTarget = transform.FindChild("AiTarget").gameObject;
-        transform.FindChild("AiTarget").SetParent(null);
+        aiTarget = transform.Find("AiTarget").gameObject;
+        transform.Find("AiTarget").SetParent(null);
 
         isCaught = false;     
     }
