@@ -20,7 +20,7 @@ public class AiMove : MonoBehaviour
         aiPathStatus = gameObject.GetComponent<Pathfinding.AIPath>();
         positionConstraint = gameObject.GetComponent<PositionConstraint>();
         rigidbody = gameObject.GetComponent<Rigidbody>();
-        monsterControl = GameObject.Find("Player").GetComponent<MonsterControl>();
+        monsterControl = GameObject.Find("GameManager").GetComponent<MonsterControl>();
         HookObj = GameObject.Find("Hook").gameObject;
     }
 
@@ -66,7 +66,6 @@ public class AiMove : MonoBehaviour
         }
         else
         {
-            //GetComponent<PositionConstraint>().constraintActive = false; 
             aiPathStatus.enabled = true;
             rigidbody.freezeRotation = false;
         }
@@ -78,7 +77,7 @@ public class AiMove : MonoBehaviour
         {
             Destroy(gameObject);
             Destroy(aiTarget);
-            monsterControl.monsterList.Remove(gameObject); // 暫時寫在Player身上 須改@@@@@@@@@@@@@@@@@@@@@@@@@@
+            monsterControl.monsterList.Remove(gameObject); // 暫時寫在Monster身上 須改@@@@@@@@@@@@@@@@@@@@@@@@@@
         }
     }
 

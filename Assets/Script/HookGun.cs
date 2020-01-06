@@ -28,6 +28,7 @@ public class HookGun : MonoBehaviour
     private void Awake()
     {
         player = GetComponentInParent<Player>();
+        moveControl = GetComponentInParent<MoveControl>();
     }
 
     // Start is called before the first frame update
@@ -45,6 +46,7 @@ public class HookGun : MonoBehaviour
 
     }
 
+    #region ShootHook
 
     void ShootHook()
     {
@@ -55,12 +57,6 @@ public class HookGun : MonoBehaviour
     }
 
 
-    //void CheckShooting() {
-    //    if (!isShooting && !isRiding) {
-    //        DoShoot();
-    //    }
-    //}
-
     void CheckShooting()
     {
         if (!isShooting && hookObj.transform.childCount == 0 ) //@@@@@@@@@@@@@@@@@@@@修改過
@@ -70,7 +66,7 @@ public class HookGun : MonoBehaviour
     }
 
     void DoShoot() {
-        isShooting = true;
+        SetShootingStatusTrue();
         isHookGoOut = true;
         GetMouseClickPosition();
         StartCoroutine("Shooting");
@@ -85,35 +81,6 @@ public class HookGun : MonoBehaviour
             Debug.DrawLine(Camera.main.transform.position, hit.point, Color.red, 2);
             Debug.Log("HitPoint:" + hit.point);
             FindHookDirection(hit.point);
-        }
-    }
-
-  
-    void CheckHookStatus()
-    {
-        CheckHookMaxLength();
-        CheckHookIsBack();
-        //Debug.Log("isHookGoOut:" + isHookGoOut);
-        //Debug.Log("isShooting:" + isShooting);
-    }
-
-    void CheckHookMaxLength()
-    {
-        if (Vector3.Distance(hookObj.transform.position, hookRope.transform.position) > ropeMaxDistance)
-        {
-            isHookGoOut = false;
-        }
-    }
-
-    void CheckHookIsBack()
-    {
-        //if (Vector3.Distance(hookObj.transform.localPosition, hookRope.transform.localPosition) < 0.1)
-        //{
-        //    isShooting = false;
-        //}
-        if (Vector3.Distance(hookObj.transform.position, hookRope.transform.position) < 0.1)
-        {
-            isShooting = false;
         }
     }
 
@@ -170,7 +137,47 @@ public class HookGun : MonoBehaviour
         hookRope.SetPosition(1, hookObj.transform.localPosition);
     }
 
+    #endregion
 
+    #region CheckHookStatus
+    void CheckHookStatus()
+    {
+        CheckHookMaxLength();
+        CheckHookIsBack();
+
+    }
+
+    void CheckHookMaxLength()
+    {
+        if (Vector3.Distance(hookObj.transform.position, hookRope.transform.position) > ropeMaxDistance)
+        {
+            isHookGoOut = false;
+        }
+    }
+
+    void CheckHookIsBack()
+    {
+
+        if (Vector3.Distance(hookObj.transform.position, hookRope.transform.position) < 0.1)
+        {
+            SetShootingStatusFalse();
+        }
+    }
+
+    public void RealeaseChild()  //R聰專用
+    {
+        if (hookObj.transform.childCount > 0)
+        {
+            for (int i = 0; i < hookObj.transform.childCount; i++)
+            {
+                hookObj.transform.GetChild(i).transform.SetParent(null);
+            }
+        }
+    }
+
+    #endregion
+
+    #region CheckHookCollider
     void CheckCollider()
     {
         //对钩子进行球形检测，返回所有碰到或者在球范围内的碰撞体数组     
@@ -200,17 +207,21 @@ public class HookGun : MonoBehaviour
             isHookGoOut = false;
         }
     }
+    #endregion
 
-    public void RealeaseChild()
+    #region boolStatus
+    //isShotting
+    void SetShootingStatusTrue()
     {
-        if (hookObj.transform.childCount > 0)
-        {
-            for (int i = 0; i < hookObj.transform.childCount; i++)
-            {
-                hookObj.transform.GetChild(i).transform.SetParent(null);
-            }
-        }
+        isShooting = true;
+        moveControl.SetAttackingStatusTrue();
     }
 
+    void SetShootingStatusFalse()
+    {
+        isShooting = false;
+        moveControl.SetAttackingStatusFalse();
+    }
+    #endregion
 
 }

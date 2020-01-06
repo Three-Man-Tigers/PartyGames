@@ -2,213 +2,84 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class Player : MonoBehaviour
 {
-    //Move
-    public float moveSpeed = 10f;
-    public float rotateSpeed = 10f;
-    Vector3 moveDirection;
-    float flySpeed = 30f;
-
-    bool isMovable = true;
-    bool isFlying = false;
-    bool isRiding = false;
-    bool isShooting = false;
-
-    float hieght = 0.5f;
-
-    Vector3 RideDirection;
+    //丟出力道 及 旋轉速度
+    public float throwForce;
+    public float throwRotateSpeed;
+    private float oriThrowForce = 20f;
+    private float oriThrowRotateSpeed = 100f;//初始值額外做
+    public bool isThrowing;
 
     GameObject hookGunObj;
     GameObject hookObj;
+    HookGun hookGun;
+    MoveControl moveControl;
 
-
-    void Start()
+    private void Awake()
     {
         hookGunObj = transform.GetChild(0).gameObject;
         hookObj = hookGunObj.transform.GetChild(0).gameObject;
+        hookGun = hookGunObj.GetComponent<HookGun>();
+        moveControl = GetComponent<MoveControl>();
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        isThrowing = false;
+
+
+        throwForce = oriThrowForce;
+        throwRotateSpeed = oriThrowRotateSpeed;
     }
 
     // Update is called once per frame
     void Update()
     {
-        CheckMove();
-        CheckHookShooting();
-        //Debug.Log("isRiding:" + isRiding);
-        //Debug.Log("isShooting:" + isShooting);
-        //CheckRiding();
+        ThrowControl();
     }
 
-    #region Move
-    //移動控制
-    void CheckMove()
+    //旋轉物件 及丟出
+    private void ThrowControl()
     {
-        if (isMovable)
+        if (hookObj.transform.childCount != 0 && Input.GetKeyDown(KeyCode.R))
         {
-            MoveControl();
-            FaceDirection();
+            isThrowing = true;
+            moveControl.SetAttackingStatusTrue();
+            InvokeRepeating("ThrowParameterControl", 0.5f, 0.5f);
         }
-    }
 
-
-    void MoveControl()
-    {
-
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+        if (hookObj.transform.childCount != 0 && Input.GetKey(KeyCode.R))
         {
-            moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
-            transform.Translate(moveDirection * Time.deltaTime * moveSpeed, Space.World);
+            transform.Rotate(Vector3.up * throwRotateSpeed * Time.deltaTime);
+            if (throwRotateSpeed >= 1000f)
+            {
+                CancelInvoke();
+            }
         }
-    }
 
-
-    void FaceDirection()
-    {
-        if (!isShooting && !GetComponent<CharacterThrow>().isThrowing)  // 暫改@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        if (hookObj.transform.childCount != 0 && Input.GetKeyUp(KeyCode.R))
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(moveDirection), Time.deltaTime * rotateSpeed);
+            hookObj.transform.GetChild(0).GetComponent<PositionConstraint>().constraintActive = false;  //for PositionConstraint @@@@@@
+            hookObj.transform.GetChild(0).GetComponent<Rigidbody>().AddForce(throwForce * this.transform.right, ForceMode.Impulse);
+            hookGun.RealeaseChild();
+            CancelInvoke();
+            throwForce = oriThrowForce;
+            throwRotateSpeed = oriThrowRotateSpeed;
+            isThrowing = false;
+            moveControl.SetAttackingStatusFalse();
         }
-        //else
-        //{
-        //    transform.LookAt(hookObj.transform);
-        //}
+
     }
 
-
-    void CheckHookShooting()
+    private void ThrowParameterControl()
     {
-        if (Vector3.Distance(hookObj.transform.position, transform.position) > 0.6) //@@@@@@@@@@@@@@@@@@@@修改過 根據localposition位置 原為0.1 hook在原點
-        {
-            isShooting = true;
-        }
-        else
-        {
-            isShooting = false;
-        }
+        throwForce += 10f;
+        throwRotateSpeed += 50f;
     }
-
-    void MoveableDisable()
-    {
-        isMovable = false;
-    }
-
-    void MoveableEnable()
-    {
-        isMovable = true;
-    }
-
-    #endregion
-
-
-
-    /*
-    #region Flying
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (isFlying && collision.gameObject.CompareTag("Monster"))
-        {
-            isShooting = false;
-            isFlying = false;
-            StopCoroutine("FlyToRidingPosition");
-            RideOnMonster(collision.gameObject);
-        }
-    }
-
-    public void SetRidingTarget(GameObject monster)
-    {
-        StartCoroutine("FlyToRidingPosition", monster);
-    }
-
-    void RideOnMonster(GameObject monster)
-    {
-        SetRidingPosition(monster);
-        SetMonsterToParent(monster);
-        isRiding = true;
-        HookGunDisable();
-        MoveableDisable();
-    }
-
-    void SetRidingPosition(GameObject monster)
-    {
-        Vector3 ridingPosition = monster.transform.GetChild(0).transform.position;
-        transform.position = new Vector3(ridingPosition.x,
-            ridingPosition.y + hieght,
-            ridingPosition.z);
-        transform.rotation = monster.transform.rotation;
-    }
-
-
-
-    IEnumerator FlyToRidingPosition(GameObject monster)
-    {
-        isFlying = true;
-
-        RideDirection = new Vector3(monster.transform.position.x,
-          monster.transform.position.y,
-          monster.transform.position.z);
-
-        //Debug.Log("RideDirection_First:" + RideDirection);
-        while (transform.position != RideDirection)
-        {
-
-            transform.position = Vector3.MoveTowards(transform.position, RideDirection, Time.deltaTime * flySpeed);
-            //transform.Translate(RideDirection * Time.deltaTime * flySpeed,Space.World);
-            //Debug.Log("RideDirection:" + RideDirection);
-            yield return null;
-        }
-    }
-
-
-    #endregion
-
-    */
-    #region HookGun
-    void HookGunDisable()
-    {
-        hookGunObj.SetActive(false);
-    }
-
-    void HookGunEnable()
-    {
-        hookGunObj.SetActive(true);
-    }
-
-    #endregion
-
-    /*
-    #region OnRide
-    void CheckRiding()
-    {
-        if (isRiding)
-            ExitMonster();
-    }
-
-    void ExitMonster()
-    {
-        if (Input.GetKey("z"))
-        {
-            isRiding = false;
-            HookGunEnable();
-            MoveableEnable();
-            SetMonsterLeaveParent();
-        }
-    }
-    #endregion
-
-    #region GetMonster
-    void SetMonsterToParent(GameObject monster)
-    {
-        transform.SetParent(monster.transform);
-    }
-
-    void SetMonsterLeaveParent()
-    {
-        transform.SetParent(null);
-    }
-    #endregion
-
-    */
 }
 
 

@@ -6,18 +6,10 @@ public class MonsterControl : MonoBehaviour
 {
     
     
-    /// <summary>
-    /// 修改名稱@@@@@@@@@@@@@@@@@@@@@@@@@@
-    /// </summary>
     public int monsterNum;
     public GameObject monsterPrefab;
-    public List<GameObject> monsterList; //monsterList
+    public List<GameObject> monsterList; 
     private GameObject newMonster;
-
-
-    //delegate void Test();
-    //Test test;
-
 
     // Start is called before the first frame update
     void Start()

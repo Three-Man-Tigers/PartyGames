@@ -15,12 +15,14 @@ public class CharacterThrow : MonoBehaviour
     GameObject hookGunObj;
     GameObject hookObj;
     HookGun hookGun;
+    MoveControl moveControl;
 
     private void Awake()
     {
         hookGunObj = transform.GetChild(0).gameObject;
         hookObj = hookGunObj.transform.GetChild(0).gameObject;
         hookGun = hookGunObj.GetComponent<HookGun>();
+        moveControl = GetComponent<MoveControl>();
     }
 
     // Start is called before the first frame update
@@ -45,6 +47,7 @@ public class CharacterThrow : MonoBehaviour
         if (hookObj.transform.childCount != 0 && Input.GetKeyDown(KeyCode.R))
         {
             isThrowing = true;
+            moveControl.SetAttackingStatusTrue();
             InvokeRepeating("ThrowParameterControl", 0.5f, 0.5f);
         }
 
@@ -66,6 +69,7 @@ public class CharacterThrow : MonoBehaviour
             throwForce = oriThrowForce;
             throwRotateSpeed = oriThrowRotateSpeed;
             isThrowing = false;
+            moveControl.SetAttackingStatusFalse();
         }
 
     }
