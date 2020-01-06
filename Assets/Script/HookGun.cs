@@ -9,6 +9,7 @@ public class HookGun : MonoBehaviour
     public GameObject hookObj;
     public LineRenderer hookRope;
     Player player;
+    MoveControl moveControl;
 
     float hookSpeed = 25f;
     float ropeMaxDistance = 15f;

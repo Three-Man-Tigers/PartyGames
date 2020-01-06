@@ -14,16 +14,12 @@ public class CharacterThrow : MonoBehaviour
 
     GameObject hookGunObj;
     GameObject hookObj;
-    PositionConstraint childPositionConstraint;
-    Rigidbody childRigidbody;
     HookGun hookGun;
 
     private void Awake()
     {
         hookGunObj = transform.GetChild(0).gameObject;
         hookObj = hookGunObj.transform.GetChild(0).gameObject;
-        childPositionConstraint = hookObj.transform.GetChild(0).GetComponent<PositionConstraint>();
-        childRigidbody = hookObj.transform.GetChild(0).GetComponent<Rigidbody>();
         hookGun = hookGunObj.GetComponent<HookGun>();
     }
 
@@ -63,8 +59,8 @@ public class CharacterThrow : MonoBehaviour
 
         if (hookObj.transform.childCount != 0 && Input.GetKeyUp(KeyCode.R))
         {
-            childPositionConstraint.constraintActive = false;  //for PositionConstraint @@@@@@
-            childRigidbody.AddForce(throwForce * this.transform.right, ForceMode.Impulse);
+            hookObj.transform.GetChild(0).GetComponent<PositionConstraint>().constraintActive = false;  //for PositionConstraint @@@@@@
+            hookObj.transform.GetChild(0).GetComponent<Rigidbody>().AddForce(throwForce * this.transform.right, ForceMode.Impulse);
             hookGun.RealeaseChild();
             CancelInvoke();
             throwForce = oriThrowForce;

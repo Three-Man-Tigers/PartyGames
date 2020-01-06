@@ -414,6 +414,7 @@ GameObject:
   - component: {fileID: 1417457368}
   - component: {fileID: 1417457369}
   - component: {fileID: 1417457370}
+  - component: {fileID: 1417457371}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -570,10 +571,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4da315ddb1f7a3641bde3f775e577ec0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MonsterNum: 0
-  MonsterPrefab: {fileID: 5266584103970269972, guid: 55269d64ad23c574db068ffdc6a26b26,
+  monsterNum: 0
+  monsterPrefab: {fileID: 5266584103970269972, guid: 55269d64ad23c574db068ffdc6a26b26,
     type: 3}
-  AllMonster: []
+  monsterList: []
 --- !u!114 &1417457370
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -588,6 +589,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 10
   rotateSpeed: 10
+--- !u!114 &1417457371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1417457360}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 710a2e4fc7752ae42b9cb3db8f0289e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 10
+  rotateSpeed: 10
+  isControlable: 0
+  isMovable: 1
+  isAttacking: 0
 --- !u!1 &2040452095
 GameObject:
   m_ObjectHideFlags: 0
