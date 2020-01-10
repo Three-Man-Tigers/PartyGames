@@ -45,14 +45,14 @@ public class Player : MonoBehaviour
     //旋轉物件 及丟出
     private void ThrowControl()
     {
-        if (hookObj.transform.childCount != 0 && Input.GetKeyDown(KeyCode.R) && Vector3.Distance(hookObj.transform.position, hookGun.hookRope.transform.position) < 0.1)
+        if (hookObj.transform.childCount != 0 && Input.GetKeyDown(KeyCode.R))
         {
             isThrowing = true;
             moveControl.SetAttackingStatusTrue();
             InvokeRepeating("ThrowParameterControl", 0.5f, 0.5f);
         }
 
-        if (isThrowing && hookObj.transform.childCount != 0 && Input.GetKey(KeyCode.R))
+        if (hookObj.transform.childCount != 0 && Input.GetKey(KeyCode.R))
         {
             transform.Rotate(Vector3.up * throwRotateSpeed * Time.deltaTime);
             if (throwRotateSpeed >= 1000f)
@@ -61,10 +61,10 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (isThrowing && hookObj.transform.childCount != 0 && Input.GetKeyUp(KeyCode.R))
+        if (hookObj.transform.childCount != 0 && Input.GetKeyUp(KeyCode.R))
         {
             hookObj.transform.GetChild(0).GetComponent<PositionConstraint>().constraintActive = false;  //for PositionConstraint @@@@@@
-            hookObj.transform.GetChild(0).GetComponent<Rigidbody>().AddForce(throwForce * this.transform.right , ForceMode.Impulse);
+            hookObj.transform.GetChild(0).GetComponent<Rigidbody>().AddForce(throwForce * this.transform.right, ForceMode.Impulse);
             hookGun.RealeaseChild();
             CancelInvoke();
             throwForce = oriThrowForce;

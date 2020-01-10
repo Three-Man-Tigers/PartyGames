@@ -59,7 +59,7 @@ public class HookGun : MonoBehaviour
 
     void CheckShooting()
     {
-        if (!isShooting && hookObj.transform.childCount.Equals(0) ) //@@@@@@@@@@@@@@@@@@@@修改過
+        if (!isShooting && hookObj.transform.childCount == 0 ) //@@@@@@@@@@@@@@@@@@@@修改過
         {
             DoShoot();
         }
@@ -157,7 +157,8 @@ public class HookGun : MonoBehaviour
 
     void CheckHookIsBack()
     {
-        if (isShooting && Vector3.Distance(hookObj.transform.position, hookRope.transform.position) < 0.1)
+
+        if (Vector3.Distance(hookObj.transform.position, hookRope.transform.position) < 0.1)
         {
             SetShootingStatusFalse();
         }
@@ -184,23 +185,24 @@ public class HookGun : MonoBehaviour
         colCollection = Physics.OverlapSphere(hookObj.transform.position, 0.5f, 1 << LayerMask.NameToLayer("Monster"));
         if (colCollection.Length > 0)
         {
-            //Debug.Log("colCollection.Length" + colCollection.Length);
+            Debug.Log("colCollection.Length" + colCollection.Length);
             foreach (Collider item in colCollection)
             {
                // Debug.Log("item:" + item);
-                if (isShooting && item.gameObject.tag.Equals("Monster") && hookObj.transform.childCount.Equals(0)) //@@@@@@@@@@@@@@@@@@@@修改過
+                if (isShooting && item.gameObject.tag.Equals("Monster") && hookObj.transform.childCount < 1) //@@@@@@@@@@@@@@@@@@@@修改過
                 {
                     item.transform.SetParent(hookObj.transform);
                     isHookGoOut = false;
                 }
-                //else if (item.gameObject.tag.Equals("Monster") && hookObj.transform.childCount == 1) //@@@@@@@@@@@@@@@@@@@@修改過
-                //{
-                //    isHookGoOut = false;
-                //    //HookTranslateBack();
-                //    //CancelHookShooting();
-                //    //player.SetRidingTarget(item.gameObject);
-                //}
-                //Debug.Log("times 2");
+                else if (item.gameObject.tag.Equals("Monster") && hookObj.transform.childCount == 1) //@@@@@@@@@@@@@@@@@@@@修改過
+                {
+                    Debug.Log("times 1");
+                    isHookGoOut = false;
+                    //HookTranslateBack();
+                    //CancelHookShooting();
+                    //player.SetRidingTarget(item.gameObject);
+                }
+                Debug.Log("times 2");
             }
             isHookGoOut = false;
         }
