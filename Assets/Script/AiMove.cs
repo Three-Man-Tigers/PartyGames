@@ -18,17 +18,11 @@ public class AiMove : MonoBehaviour
     void Start()
     {       
         //將 AiTarget 移出子物件
-<<<<<<< HEAD
         aiTarget = transform.FindChild("AiTarget").gameObject;
         transform.FindChild("AiTarget").SetParent(null);
      }
-=======
-        aiTarget = transform.Find("AiTarget").gameObject;
-        transform.Find("AiTarget").SetParent(null);
 
-        isCaught = false;     
-    }
->>>>>>> 222c7fec4d530d6be5ddb7bbc592899ddaec2a18
+
 
     // Update is called once per frame
     void Update()
