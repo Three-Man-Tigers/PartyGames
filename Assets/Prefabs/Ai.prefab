@@ -31,7 +31,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5266584103970269972}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9, y: 0, z: 8.9}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5266584104137890315}
@@ -85,7 +85,7 @@ MonoBehaviour:
   repathRate: 0.5
   canSearch: 1
   canMove: 1
-  maxSpeed: 5
+  maxSpeed: 20
   gravity: {x: NaN, y: NaN, z: NaN}
   groundMask:
     serializedVersion: 2
@@ -129,7 +129,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ba5c03fdf8486245afa3a724dfbf342, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isCaught: 0
 --- !u!54 &5266584103970269974
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -174,7 +173,7 @@ PositionConstraint:
   m_AffectTranslationY: 1
   m_AffectTranslationZ: 1
   m_IsContraintActive: 0
-  m_IsLocked: 0
+  m_IsLocked: 1
   m_Sources:
   - sourceTransform: {fileID: 0}
     weight: 1

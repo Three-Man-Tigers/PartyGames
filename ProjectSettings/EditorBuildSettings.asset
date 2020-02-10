@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu.unity
     guid: 54e7e780a3fe37c45945a5d5f84d055e
   - enabled: 1
+    path: Assets/Scenes/GameSelect.unity
+    guid: b9d23ed6ac2266a41a163618be697806
+  - enabled: 1
     path: Assets/Scenes/MonsterThrower.unity
     guid: 74573e2193681de4caa73b8cfa75816b
   - enabled: 1
